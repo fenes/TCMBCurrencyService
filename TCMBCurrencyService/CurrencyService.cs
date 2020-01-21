@@ -7,7 +7,7 @@ using TCMBCurrencyService.Service;
 
 namespace TCMBCurrencyService.Action.Implementation
 {
-    public sealed class CurrencyAction : IActionAfter, IOrderOperationAfter, IFilterOperationAfter
+    public sealed class CurrencyService : IActionAfter, IOrderOperationAfter, IFilterOperationAfter
     {
         private IEnumerable<Currency> CurrencyList { get; set; }
 
@@ -32,7 +32,7 @@ namespace TCMBCurrencyService.Action.Implementation
 
         public IActionAfter Initialize(DateTime? date = null)
         {
-            CurrencyList = CurrencyService.GetCurrentCurrencyRates(date);
+            CurrencyList = TCMBService.GetCurrentCurrencyRates(date);
             return this;
         }
     }

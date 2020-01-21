@@ -13,11 +13,11 @@ namespace Test
         public UnitTest(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
-            _currencyAction = new CurrencyAction();
+            _currencyService = new CurrencyService();
         }
 
         private readonly ITestOutputHelper _testOutputHelper;
-        private readonly CurrencyAction _currencyAction;
+        private readonly CurrencyService _currencyService;
 
         public static IEnumerable<object[]> TestDateData =>
             new[]
@@ -36,16 +36,16 @@ namespace Test
         {
             if (!expectedResult)
             {
-                Assert.Throws<Exception>(() => _currencyAction.Initialize(input).GetList());
+                Assert.Throws<Exception>(() => _currencyService.Initialize(input).GetList());
             }
             else if (input.DayOfWeek == DayOfWeek.Saturday || input.DayOfWeek == DayOfWeek.Sunday ||
                      input.Date > DateTime.Now.Date)
             {
-                Assert.Throws<Exception>(() => _currencyAction.Initialize(input).GetList());
+                Assert.Throws<Exception>(() => _currencyService.Initialize(input).GetList());
             }
             else
             {
-                var currencyList = _currencyAction.Initialize(input).GetList();
+                var currencyList = _currencyService.Initialize(input).GetList();
                 Assert.NotNull(currencyList);
             }
         }
@@ -53,21 +53,21 @@ namespace Test
         [Fact]
         public void TestInit()
         {
-            var currencyList = _currencyAction.Initialize().GetList();
+            var currencyList = _currencyService.Initialize().GetList();
             Assert.NotNull(currencyList);
         }
 
         [Fact]
         public void TestFilter()
         {
-            var currencyList = _currencyAction.Initialize().Filter(x => x.Code.Equals("USD")).GetList();
+            var currencyList = _currencyService.Initialize().Filter(x => x.Code.Equals("USD")).GetList();
             Assert.NotNull(currencyList);
         }
 
         [Fact]
         public void TestSort()
         {
-            var firstCurrency = _currencyAction.Initialize().Order(x => x.Code, SortOrder.Ascending).GetList().FirstOrDefault().Code;
+            var firstCurrency = _currencyService.Initialize().Order(x => x.Code, SortOrder.Ascending).GetList().FirstOrDefault()?.Code;
             Assert.Equal("AUD", firstCurrency);
         }
     }

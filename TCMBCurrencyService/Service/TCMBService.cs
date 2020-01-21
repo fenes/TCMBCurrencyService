@@ -6,7 +6,7 @@ using TCMBCurrencyService.Util;
 
 namespace TCMBCurrencyService.Service
 {
-    public static class CurrencyService
+    public static class TCMBService
     {
         private const string TRY = "TRY";
         private const string TODAY_XML_URL = "https://www.tcmb.gov.tr/kurlar/today.xml";
