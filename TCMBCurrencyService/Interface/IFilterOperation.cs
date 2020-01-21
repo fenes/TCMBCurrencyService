@@ -1,7 +1,7 @@
 ﻿using System;
 using TCMBCurrencyService.Model;
 
-namespace TCMBCurrencyService.Action.Interface
+namespace TCMBCurrencyService.Interface
 {
     public interface IFilterOperation
     {

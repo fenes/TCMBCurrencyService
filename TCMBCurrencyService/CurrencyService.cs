@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TCMBCurrencyService.Action.Interface;
+using TCMBCurrencyService.Interface;
 using TCMBCurrencyService.Model;
 using TCMBCurrencyService.Service;
 
-namespace TCMBCurrencyService.Action.Implementation
+namespace TCMBCurrencyService
 {
-    public sealed class CurrencyService : IActionAfter, IOrderOperationAfter, IFilterOperationAfter
+    public sealed class CurrencyService : IInitializeOperationAfter, IOrderOperationAfter, IFilterOperationAfter
     {
         private IEnumerable<Currency> CurrencyList { get; set; }
 
@@ -30,7 +30,12 @@ namespace TCMBCurrencyService.Action.Implementation
             return CurrencyList.ToList();
         }
 
-        public IActionAfter Initialize(DateTime? date = null)
+        public Currency GetFirst()
+        {
+            return CurrencyList.FirstOrDefault();
+        }
+
+        public IInitializeOperationAfter Initialize(DateTime? date = null)
         {
             CurrencyList = TCMBService.GetCurrentCurrencyRates(date);
             return this;
