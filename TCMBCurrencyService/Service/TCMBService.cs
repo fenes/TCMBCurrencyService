@@ -81,10 +81,12 @@ namespace TCMBCurrencyService.Service
                 var forexSellingList = myxml.SelectNodes("/Tarih_Date/Currency/ForexSelling");
                 var banknoteBuyingList = myxml.SelectNodes("/Tarih_Date/Currency/BanknoteBuying");
                 var banknoteSellingList = myxml.SelectNodes("/Tarih_Date/Currency/BanknoteSelling");
+                var crossRateUSDList = myxml.SelectNodes("/Tarih_Date/Currency/CrossRateUSD");
+                var crossRateOtherList = myxml.SelectNodes("/Tarih_Date/Currency/CrossRateOther");
 
                 var ExchangeRates = new List<Currency>
                 {
-                    new Currency("Turkish Lira", TRY, TRY + "/" + TRY, 1, 1, 1, 1)
+                    new Currency("Turkish Lira", TRY, TRY + "/" + TRY, 1, 1, 1, 1, 0, 0)
                 };
 
 
@@ -97,7 +99,9 @@ namespace TCMBCurrencyService.Service
                         forexBuyingList.Item(i).InnerText.ConvertToDouble(),
                         forexSellingList.Item(i).InnerText.ConvertToDouble(),
                         banknoteBuyingList.Item(i).InnerText.ConvertToDouble(),
-                        banknoteSellingList.Item(i).InnerText.ConvertToDouble()
+                        banknoteSellingList.Item(i).InnerText.ConvertToDouble(),
+                        crossRateUSDList.Item(i).InnerText.ConvertToDouble(),
+                        crossRateOtherList.Item(i).InnerText.ConvertToDouble()
                     );
 
                     ExchangeRates.Add(cur);
