@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TCMBCurrencyService.Action.Implementation;
+using TCMBCurrencyService;
 using TCMBCurrencyService.Model;
 using Xunit;
 using Xunit.Abstractions;
@@ -51,6 +51,28 @@ namespace Test
         }
 
         [Fact]
+        public void TestFilter()
+        {
+            var currencyList = _currencyService.Initialize().Filter(x => x.Code.Equals("USD")).GetFirst();
+            Assert.NotNull(currencyList);
+        }
+
+        [Fact]
+        public void TestMultiFieldFilter()
+        {
+            var swedishCurrency = _currencyService.Initialize().Filter(x => x.Code.StartsWith("S") && x.Name.StartsWith("SWE")).GetFirst();
+            Assert.NotNull(swedishCurrency);
+        }
+
+        [Fact]
+        public void TestFilterAfterSort()
+        {
+            var SEKCurrency = _currencyService.Initialize().Order(x => x.Code, SortOrder.Descending)
+                .Filter(x => x.Code.StartsWith("S")).GetFirst()?.Code;
+            Assert.Equal("SEK", SEKCurrency);
+        }
+
+        [Fact]
         public void TestInit()
         {
             var currencyList = _currencyService.Initialize().GetList();
@@ -58,17 +80,19 @@ namespace Test
         }
 
         [Fact]
-        public void TestFilter()
+        public void TestSort()
         {
-            var currencyList = _currencyService.Initialize().Filter(x => x.Code.Equals("USD")).GetList();
-            Assert.NotNull(currencyList);
+            var firstCurrency = _currencyService.Initialize().Order(x => x.Code, SortOrder.Ascending).GetList()
+                .FirstOrDefault()?.Code;
+            Assert.Equal("AUD", firstCurrency);
         }
 
         [Fact]
-        public void TestSort()
+        public void TestSortAfterFilter()
         {
-            var firstCurrency = _currencyService.Initialize().Order(x => x.Code, SortOrder.Ascending).GetList().FirstOrDefault()?.Code;
-            Assert.Equal("AUD", firstCurrency);
+            var firstCurrency = _currencyService.Initialize().Filter(x => x.Code.StartsWith("S"))
+                .Order(x => x.Code, SortOrder.Ascending).GetList().FirstOrDefault()?.Code;
+            Assert.Equal("SAR", firstCurrency);
         }
     }
 }
