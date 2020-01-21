@@ -4,18 +4,18 @@ using System.Xml;
 using TCMBCurrencyService.Model;
 using TCMBCurrencyService.Util;
 
-namespace TCMBCurrencyService.Service.Implementation
+namespace TCMBCurrencyService.Service
 {
     public static class CurrencyService
     {
         private const string TRY = "TRY";
         private const string TODAY_XML_URL = "https://www.tcmb.gov.tr/kurlar/today.xml";
 
-        public static Dictionary<string, Currency> GetCurrentCurrencyRates()
+        public static List<Currency> GetCurrentCurrencyRates(DateTime? date)
         {
             try
             {
-                return GetCurrencyRates(TODAY_XML_URL);
+                return date.HasValue ? GetCurrencyRatesWithDate(date.Value) : GetCurrencyRates(TODAY_XML_URL);
             }
             catch (Exception e)
             {
@@ -24,10 +24,12 @@ namespace TCMBCurrencyService.Service.Implementation
             }
         }
 
-        public static Dictionary<string, Currency> GetCurrencyRatesWithDate(DateTime date)
+        private static List<Currency> GetCurrencyRatesWithDate(DateTime date)
         {
             try
             {
+                if (date.Date > DateTime.Today) throw new Exception("The date cannot be greater than today!");
+                if (date.IsHoliday()) throw new Exception("The date specified may be a weekend or a public holiday!");
                 var requestDate = GetRequestDate(date);
                 var url = GenerateUrl(requestDate);
                 return GetCurrencyRates(url);
@@ -50,7 +52,7 @@ namespace TCMBCurrencyService.Service.Implementation
                 requestDate.ToString("ddMMyyyy"));
         }
 
-        private static Dictionary<string, Currency> GetCurrencyRates(string Link)
+        private static List<Currency> GetCurrencyRates(string Link)
         {
             var myxml = new XmlDocument(); // Create XmlDocument object.
             try
@@ -69,7 +71,7 @@ namespace TCMBCurrencyService.Service.Implementation
             return ParseXmlDocument(myxml);
         }
 
-        private static Dictionary<string, Currency> ParseXmlDocument(XmlDocument myxml)
+        private static List<Currency> ParseXmlDocument(XmlDocument myxml)
         {
             try
             {
@@ -80,9 +82,9 @@ namespace TCMBCurrencyService.Service.Implementation
                 var banknoteBuyingList = myxml.SelectNodes("/Tarih_Date/Currency/BanknoteBuying");
                 var banknoteSellingList = myxml.SelectNodes("/Tarih_Date/Currency/BanknoteSelling");
 
-                var ExchangeRates = new Dictionary<string, Currency>
+                var ExchangeRates = new List<Currency>
                 {
-                    {TRY, new Currency("Turkish Lira", TRY, TRY + "/" + TRY, 1, 1, 1, 1)}
+                    new Currency("Turkish Lira", TRY, TRY + "/" + TRY, 1, 1, 1, 1)
                 };
 
 
@@ -98,7 +100,7 @@ namespace TCMBCurrencyService.Service.Implementation
                         banknoteSellingList.Item(i).InnerText.ConvertToDouble()
                     );
 
-                    ExchangeRates.Add(codeList?.Item(i)?.InnerText, cur);
+                    ExchangeRates.Add(cur);
                 }
 
                 return ExchangeRates;

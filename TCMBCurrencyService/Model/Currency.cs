@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TCMBCurrencyService.Model
+﻿namespace TCMBCurrencyService.Model
 {
     public class Currency
     {
@@ -15,12 +13,7 @@ namespace TCMBCurrencyService.Model
             BanknoteBuying = banknoteBuying;
             BanknoteSelling = banknoteSelling;
         }
-        public override string ToString()
-        {
-            return
-                $"Name:{Name}, Code:{Code}, CrossRateName:{CrossRateName}, ForexBuying:{ForexBuying}, ForexSelling:{ForexSelling}, " +
-                $"BanknoteBuying:{BanknoteBuying}, BanknoteSelling:{BanknoteSelling}";
-        }
+
         public string Name { get; }
         public string Code { get; }
         public string CrossRateName { get; }
@@ -28,5 +21,12 @@ namespace TCMBCurrencyService.Model
         public double ForexSelling { get; }
         public double BanknoteBuying { get; }
         public double BanknoteSelling { get; }
+
+        public override string ToString()
+        {
+            return
+                $"Name:{Name}, Code:{Code}, CrossRateName:{CrossRateName}, ForexBuying:{ForexBuying}, ForexSelling:{ForexSelling}, " +
+                $"BanknoteBuying:{BanknoteBuying}, BanknoteSelling:{BanknoteSelling}";
+        }
     }
 }

@@ -2,7 +2,9 @@
 {
     public enum ExchangeType
     {
-        ForexBuying, ForexSelling,
-        BanknoteBuying, BanknoteSelling
+        ForexBuying,
+        ForexSelling,
+        BanknoteBuying,
+        BanknoteSelling
     }
 }
