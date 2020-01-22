@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TCMBCurrencyService;
 using TCMBCurrencyService.Model;
+using TCMBCurrencyService.Util;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -51,17 +52,39 @@ namespace Test
         }
 
         [Fact]
+        public void TestExportCsv()
+        {
+            var result = _currencyService.Initialize().Filter(x => x.Code.StartsWith("S"))
+                .Order(x => x.Code, SortOrder.Ascending).Export(ExportType.Csv);
+            _testOutputHelper.WriteLine(result);
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public void TestExportJson()
+        {
+            var result = _currencyService.Initialize().Filter(x => x.Code.StartsWith("S"))
+                .Order(x => x.Code, SortOrder.Ascending).Export(ExportType.Json);
+            _testOutputHelper.WriteLine(result);
+            var isValid = JsonUtil.IsValidJson(result);
+            Assert.True(isValid);
+        }
+
+        [Fact]
+        public void TestExportXml()
+        {
+            var result = _currencyService.Initialize().Filter(x => x.Code.StartsWith("S"))
+                .Order(x => x.Code, SortOrder.Ascending).Export(ExportType.Xml);
+            _testOutputHelper.WriteLine(result);
+            var isValid = XmlUtil.IsValidXml(result);
+            Assert.True(isValid);
+        }
+
+        [Fact]
         public void TestFilter()
         {
             var currencyList = _currencyService.Initialize().Filter(x => x.Code.Equals("USD")).GetFirst();
             Assert.NotNull(currencyList);
-        }
-
-        [Fact]
-        public void TestMultiFieldFilter()
-        {
-            var swedishCurrency = _currencyService.Initialize().Filter(x => x.Code.StartsWith("S") && x.Name.StartsWith("SWE")).GetFirst();
-            Assert.NotNull(swedishCurrency);
         }
 
         [Fact]
@@ -77,6 +100,14 @@ namespace Test
         {
             var currencyList = _currencyService.Initialize().GetList();
             Assert.NotNull(currencyList);
+        }
+
+        [Fact]
+        public void TestMultiFieldFilter()
+        {
+            var swedishCurrency = _currencyService.Initialize()
+                .Filter(x => x.Code.StartsWith("S") && x.Name.StartsWith("SWE")).GetFirst();
+            Assert.NotNull(swedishCurrency);
         }
 
         [Fact]

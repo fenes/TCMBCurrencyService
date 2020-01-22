@@ -1,7 +1,15 @@
-﻿namespace TCMBCurrencyService.Model
+﻿using System;
+using TCMBCurrencyService.Util;
+
+namespace TCMBCurrencyService.Model
 {
+    [Serializable]
     public class Currency
     {
+        public Currency()
+        {
+        }
+
         public Currency(string name, string code, string crossRateName, double forexBuying, double forexSelling,
             double banknoteBuying, double banknoteSelling, double crossRateUsd, double crossRateOther)
         {
@@ -16,22 +24,21 @@
             CrossRateOther = crossRateOther;
         }
 
-        public string Name { get; }
-        public string Code { get; }
-        public string CrossRateName { get; }
-        public double ForexBuying { get; }
-        public double ForexSelling { get; }
-        public double BanknoteBuying { get; }
-        public double BanknoteSelling { get; }
-        public double CrossRateUSD { get; }
-        public double CrossRateOther { get; }
+        public string Name { get; set; }
+        public string Code { get; set; }
+        public string CrossRateName { get; set; }
+        public double ForexBuying { get; set; }
+        public double ForexSelling { get; set; }
+        public double BanknoteBuying { get; set; }
+        public double BanknoteSelling { get; set; }
+        public double CrossRateUSD { get; set; }
+        public double CrossRateOther { get; set; }
 
         public override string ToString()
         {
             return
-                $"Name:{Name}, Code:{Code}, CrossRateName:{CrossRateName}, ForexBuying:{ForexBuying}, ForexSelling:{ForexSelling}, " +
-                $"BanknoteBuying:{BanknoteBuying}, BanknoteSelling:{BanknoteSelling}, CrossRateUSD:{CrossRateUSD}, CrossRateOther:{CrossRateOther}";
+                $"{Name}, {Code}, {CrossRateName}, {ForexBuying.ToString(NumericUtil.NumberFormatInfo)}, {ForexSelling.ToString(NumericUtil.NumberFormatInfo)}, " +
+                $"{BanknoteBuying.ToString(NumericUtil.NumberFormatInfo)}, {BanknoteSelling.ToString(NumericUtil.NumberFormatInfo)}, {CrossRateUSD.ToString(NumericUtil.NumberFormatInfo)}, {CrossRateOther.ToString(NumericUtil.NumberFormatInfo)}";
         }
-
     }
 }

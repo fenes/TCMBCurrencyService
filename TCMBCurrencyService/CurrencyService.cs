@@ -4,6 +4,7 @@ using System.Linq;
 using TCMBCurrencyService.Interface;
 using TCMBCurrencyService.Model;
 using TCMBCurrencyService.Service;
+using TCMBCurrencyService.Util;
 
 namespace TCMBCurrencyService
 {
@@ -23,6 +24,21 @@ namespace TCMBCurrencyService
                 ? CurrencyList.OrderBy(expression)
                 : CurrencyList.OrderByDescending(expression);
             return this;
+        }
+
+        public string Export(ExportType exportType)
+        {
+            switch (exportType)
+            {
+                case ExportType.Xml:
+                    return CurrencyList.ToArray().ToXML();//must serialize
+                case ExportType.Json:
+                    return CurrencyList.ToJson();
+                case ExportType.Csv:
+                    return CurrencyList.ToCsv();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(exportType), exportType, "Wrong Export type");
+            }
         }
 
         public List<Currency> GetList()
