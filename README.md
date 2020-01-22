@@ -1,4 +1,4 @@
-# TCMBCurrencyService
+# TCMB Currency Service
 .Net Core 2.1 library project which serve TCMB currency data.  
   * Language Code: C#  
   * [Fluent Interface Pattern](https://en.wikipedia.org/wiki/Fluent_interface "Wikipedia") is implemented on this project.  
@@ -15,10 +15,10 @@ var NameStartSCurrencyList = _currencyService.Initialize().Order(x => x.Code, So
                                                                     .Filter(x => x.Code.StartsWith("S")).GetList();
 ```
 
-The reason I use "Fluent Interface Pattern" is to be able to use sorting and filtering operations easily.  
-When you initialize the service , you can do sort or filter action on currency list.  
-When you want to get result list , then call GetList() function after the sort, filter or initialize command.  
-If you send public holiday on Turkey or weekend(Saturday and Sunday) date  , you will get exception like "The date specified may be a weekend or a public holiday!"  
+  * The reason I use "Fluent Interface Pattern" is to be able to use sorting and filtering operations easily.  
+  * When you initialize the service , you can do sort or filter action on currency list.  
+  * When you want to get result list , then call GetList() function after the sort, filter or initialize command.  
+  * If you send public holiday on Turkey or weekend(Saturday and Sunday) date  , you will get exception like **"The date specified may be a weekend or a public holiday!"**  
 
 
 ## Instruction for testing
