@@ -14,8 +14,12 @@ var USDCurrency  = _currencyService.Initialize().Filter(x => x.Code.Equals("USD"
 var NameStartSCurrencyList = _currencyService.Initialize().Order(x => x.Code, SortOrder.Descending)
                                                                     .Filter(x => x.Code.StartsWith("S")).GetList();
 ```
+
+The reason I use "Fluent Interface Pattern" is to be able to use sorting and filtering operations easily.  
 When you initialize the service , you can do sort or filter action on currency list.  
-When you want to get result list , then call GetList() function after the sort, filter or initialize command.
+When you want to get result list , then call GetList() function after the sort, filter or initialize command.  
+If you send public holiday on Turkey or weekend(Saturday and Sunday) date  , you will get exception like "The date specified may be a weekend or a public holiday!"  
+
 
 ## Instruction for testing
 Execute this command on cmd for running all test
